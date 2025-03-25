@@ -1,9 +1,15 @@
 <template>
   <div class="d-flex flex-column" style="width: 20em">
+    <input
+      type="text"
+      class="form-control mb-2"
+      placeholder="Title"
+      v-model="formModal.title"
+    />
     <textarea
       type="text"
       class="form-control mb-2"
-      placeholder="Description"
+      placeholder="Description (optional)"
       v-model="formModal.description"
     />
     <ul class="form-control d-flex flex-wrap">
@@ -31,6 +37,7 @@ const props = defineProps<{
 }>()
 
 const formModal: Ref<MetadataEditorFormType> = ref({
+  title: props.metadata.title,
   description: props.metadata.description,
   authors: props.metadata.authors,
   filename: props.metadata.filename

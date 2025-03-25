@@ -261,7 +261,7 @@ async function uploadFiles(uploadFiles: FileList) {
       storeProject.lastProjectId,
       uploadFile.name,
       uploadFile.size,
-      uploadFile.name,
+      '',  // Empty title initially
       undefined,
       undefined,
       new Date().toISOString(),
@@ -461,11 +461,11 @@ async function updateSingleFileMetadata(
   newMetaData: FileMetadataForm
 ) {
   if (newMetaData.title.trim().length == 0) {
-    storeApp.alertsWarning("Can not update file's metadata, since title is empty")
+    storeApp.alertsWarning("Title is required. Please enter a title for the file.")
     return
   }
   if (newMetaData.filename.trim().length == 0) {
-    storeApp.alertsWarning("Can not update file's metadata, since filename is empty")
+    storeApp.alertsWarning("Filename is required. Please enter a filename.")
     return
   }
   try {

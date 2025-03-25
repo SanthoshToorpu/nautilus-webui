@@ -193,6 +193,7 @@ export type FileMetadataForm = {
   filename: string
 }
 export interface MetadataEditorFormType {
+  title: string
   description: string
   authors: string[]
   filename: string

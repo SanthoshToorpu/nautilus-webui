@@ -12,14 +12,14 @@
     <td class="align-middle">
       <div v-if="showEditComponents">
         <input
-          :value="metadataFormModal.title"
+          :value="metadataFormModal.filename"
           class="form-control file-title"
-          @input="handleTitleInput"
+          @input="handleFilenameInput"
         />
       </div>
       <div v-else>
         <span class="d-inline-block text-truncate file-title">
-          {{ props.clientVisibleFile.file.title }}
+          {{ props.clientVisibleFile.file.filename }}
         </span>
       </div>
     </td>
@@ -72,13 +72,16 @@
         >
           {{ isAuthorsAvailable ? `Authors; ` : '' }}
           {{ isDescriptionAvailable ? `Description; ` : '' }}
+          {{ isTitleAvailable ? `Title; ` : '' }}
           <div v-show="upHere" class="card position-absolute bottom-0 start-0 metadata-card">
             <div class="card-body">
+              <div class="card-title custom-title">Title:</div>
+              <p class="card-text">{{ props.clientVisibleFile.file.title || 'No title set' }}</p>
               <div class="card-title custom-title">Description:</div>
-              <p class="card-text">{{ props.clientVisibleFile.file.description }}</p>
+              <p class="card-text">{{ props.clientVisibleFile.file.description || 'No description set' }}</p>
               <div class="card-title custom-title">Authors:</div>
               <p class="card-text">
-                {{ authors }}
+                {{ authors || 'No authors set' }}
               </p>
             </div>
           </div>
@@ -174,6 +177,12 @@ const isDescriptionAvailable = computed(
     props.clientVisibleFile.file.description != ''
 )
 
+const isTitleAvailable = computed(
+  () =>
+    props.clientVisibleFile.file.title != undefined &&
+    props.clientVisibleFile.file.title != ''
+)
+
 const showEditComponents = computed(
   () => (props.inEditMode || inSingleFileEditMode.value) && props.clientVisibleFile.file.isEditable
 )
@@ -197,11 +206,11 @@ watch(props.clientVisibleFile, (newValue) => {
   metadataFormModal.value.filename = newValue.file.filename
 })
 
-function handleTitleInput(event: Event) {
+function handleFilenameInput(event: Event) {
   event.preventDefault()
   const target = event.target as HTMLInputElement
   const value = target.value.trim()
-  metadataFormModal.value.title = value
+  metadataFormModal.value.filename = value
   updateFileMetadata()
 }
 
@@ -235,6 +244,7 @@ async function saveMetadata() {
 }
 
 async function updateMetadataForm(newValue: MetadataEditorFormType) {
+  metadataFormModal.value.title = newValue.title
   metadataFormModal.value.description = newValue.description
   metadataFormModal.value.authors = newValue.authors
   metadataFormModal.value.filename = newValue.filename
